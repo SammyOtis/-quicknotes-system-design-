@@ -28,9 +28,14 @@ async function request(url, options = {}) {
   if (!response.ok) {
     throw new Error(`HTTP Error! Status: ${response.status} (${response.statusText})`);
   }
+  
+  // Handle empty responses (like HTTP 204 No Content or empty DELETE payloads)
+  const text = await response.text();
+  const data = text ? JSON.parse(text) : {};
+
   return {
     status: response.status,
-    data: await response.json(),
+    data: data,
   };
 }
 
@@ -60,7 +65,7 @@ function renderNotes(items) {
     deleteBtn.className = "delete-btn";
     deleteBtn.textContent = "Delete";
     deleteBtn.type = "button";
-    deleteBtn.addEventListener("click", () => deleteNote(note.id));
+    deleteBtn.addEventListener("click", () => deleteNote(note.id, deleteBtn));
 
     li.appendChild(titleH3);
     li.appendChild(bodyP);
@@ -146,9 +151,47 @@ async function createNote(event) {
   }
 }
 
-// Placeholder function for DELETE (Task 3)
-async function deleteNote(id) {
-  console.log("Delete triggered for ID:", id);
+/* 
+ * NOTE ON JSONPLACEHOLDER DELETE BEHAVIOR:
+ * JSONPlaceholder is a mock API. When POSTing a new note, it returns a fake ID (e.g., 101).
+ * Because the mock server doesn't actually store new records, sending a DELETE request 
+ * for a freshly created fake ID (like 101) may return a 404 or empty success object.
+ * To handle this sensibly:
+ * 1. If the ID is a mock client-side ID (> 100) or if the API DELETE fails because the server 
+ *    never persisted it, we intercept or fallback to removing it from our local state array.
+ * 2. If it's a real server post ID (1-100), we issue the real DELETE request to https://jsonplaceholder.typicode.com/posts/{id}.
+ */
+async function deleteNote(id, buttonElement) {
+  buttonElement.disabled = true;
+  setStatus(`Deleting note ${id}...`, "loading");
+
+  // Check if it's a mock ID generated locally by JSONPlaceholder (IDs > 100)
+  const isMockCreatedNote = id > 100;
+
+  try {
+    if (!isMockCreatedNote) {
+      const res = await request(`${API_URL}/${id}`, {
+        method: "DELETE",
+      });
+      console.log(`DELETE status for ID ${id}:`, res.status);
+    }
+
+    // Remove note from local array state and re-render
+    notes = notes.filter((n) => n.id !== id);
+    renderNotes(notes);
+    setStatus(`Note ${id} deleted successfully.`, "success");
+  } catch (error) {
+    console.error("DELETE Error:", error);
+    // Sensible fallback for mock server limitations
+    if (isMockCreatedNote) {
+      notes = notes.filter((n) => n.id !== id);
+      renderNotes(notes);
+      setStatus(`Locally created note ${id} removed.`, "success");
+    } else {
+      setStatus(`Failed to delete note ${id}. Please try again.`, "error");
+      buttonElement.disabled = false;
+    }
+  }
 }
 
 // Event Listeners
