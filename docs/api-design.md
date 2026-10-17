@@ -13,7 +13,7 @@ This document defines the RESTful API contract for the QuickNotes backend servic
 | `DELETE` | `/api/v1/notes/:id`    | Deletes a note by its unique ID                                | `204 No Content` |
 | `GET`    | `/api/v1/notes/search` | Searches user notes using a query parameter (`?q=keyword`)     | `200 OK`         |
 
-## 2. Request & Response Examples
+## 2. Request & Response Examples given
 
 ### Creating a Note (`POST /api/v1/notes`)
 
@@ -53,7 +53,8 @@ JSON
 
 Request Header:
 
-HTTP
+```HTTP
+
 GET /api/v1/notes?page=1&limit=10 HTTP/1.1
 Host: api.quicknotes.com
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
@@ -88,6 +89,7 @@ JSON
 }
 ]
 }
+```
 
 ## 3. Error Status Codes & Response Format
 
