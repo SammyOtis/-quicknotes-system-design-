@@ -1,4 +1,4 @@
-# QuickNotes Relational Data Model Specifications.
+# Quick-Notes Relational Data Model Specification.
 
 This document details the database schema architecture, entity-relationship structure, DDL statements, indexing strategies, and relational database selection for QuickNotes.
 
@@ -41,7 +41,7 @@ This document details the database schema architecture, entity-relationship stru
 
 ## 3. CREATE TABLE Statements (SQL DDL)
 
-sql
+```sql
 -- Enable UUID extension
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
@@ -111,6 +111,7 @@ SELECT category, COUNT(id) AS total_notes
 FROM notes
 WHERE user_id = 'e3b0c442-98fc-11ee-b9d1-0242ac120002'
 GROUP BY category;
+```
 
 ## 5. Performance Indexing
 
