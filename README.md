@@ -40,11 +40,11 @@ Click Delete on any note card to remove it (DELETE).
 
 ## Technical Documentation Links
 
-REST API Design Specification ('docs/api-design.md'): Endpoint tables, JSON request/response structures, and HTTP error handling rules.
+REST API Design Specification (`docs/api-design.md`): Endpoint tables, JSON request/response structures, and HTTP error handling rules.
 
-Data Model & Database Schema ('docs/data-model.md'): Entity relationships, PostgreSQL DDL statements, indexing strategies, and database engine selection rationale.
+Data Model & Database Schema (`docs/data-model.md`): Entity relationships, PostgreSQL DDL statements, indexing strategies, and database engine selection rationale.
 
-System Architecture & Scaling Plan ('docs/architecture.md'): High-level component diagram, 1M user load estimates, step-by-step request flows, and HA/SPOF analysis.
+System Architecture & Scaling Plan (`docs/architecture.md`): High-level component diagram, 1M user load estimates, step-by-step request flows, and HA/SPOF analysis.
 
 ### What I Learned
 
